@@ -49,8 +49,9 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "vector_search",
     description:
-      "Perform a semantic similarity search over previously ingested Drive content. " +
-      "More powerful than drive_search for conceptual queries. Use this to deeply query Drive content based on meaning.",
+      "Always use this to query PDF content. " +
+      "Use this to  understand or information from documents, " +
+      "especially PDFs. Finds relevant passages even when exact keywords differ.",
     input_schema: {
       type: "object",
       properties: {
