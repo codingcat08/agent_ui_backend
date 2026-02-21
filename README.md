@@ -1,64 +1,78 @@
-1. Project highlights 
+# Agent UI Backend
+
+## Project Highlights
+
+```
 agent_ui_backend/
-├── agent/          ← Agent core (TypeScript) — tool loop, Drive, vector store
-├── backend/        ← API server — OAuth, SSE streaming, rate limiting
-└── frontend/       ← React — polished research UI
+├── agent/      ← Agent core (TypeScript) — tool loop, Drive, vector store
+├── backend/    ← API server — OAuth, SSE streaming, rate limiting
+└── frontend/   ← React — polished research UI
+```
 
-Stack: Node.js / TypeScript · OpenAI (GPT-4o-mini + OpenAI's text-embedding-3-small) · Serper.dev (web search) · Google Drive API · React + Tailwind
+**Stack:**
 
+- Node.js / TypeScript
+- OpenAI (GPT-4o-mini + text-embedding-3-small)
+- Serper.dev (web search)
+- Google Drive API
+- React + Tailwind
 
-2. Complete Folder Structure
-AGENT_UI_BACKEND/                              ← root project folder
+---
+
+## Complete Folder Structure
+
+```
+AGENT_UI_BACKEND/
 │
-├── agent/                          ← Agent module (the brain)
+├── agent/
 │   ├── package.json
 │   ├── tsconfig.json
 │   ├── .env.example
 │   │
-│   ├── index.ts                    ← Public API — import from here only
+│   ├── index.ts
 │   │
 │   ├── types/
-│   │   └── index.ts                ← All shared TypeScript interfaces
+│   │   └── index.ts
 │   │
 │   ├── core/
-│   │   ├── agentLoop.ts            ← Main agent loop orchestrator
-│   │   ├── llmClient.ts            ← OpenAI API wrapper + message builders
-│   │   ├── systemPrompt.ts         ← System prompt builder
-│   │   └── driveTokenStore.ts      ← Google OAuth2 token manager
+│   │   ├── agentLoop.ts
+│   │   ├── llmClient.ts
+│   │   ├── systemPrompt.ts
+│   │   └── driveTokenStore.ts
 │   │
 │   ├── tools/
-│   │   ├── definitions.ts          ← Tool schemas sent to the LLM
-│   │   ├── executor.ts             ← Dispatches tool calls to implementations
-│   │   ├── webSearch.ts            ← Serper.dev web search
-│   │   ├── webScrape.ts            ← HTML fetch + text extraction
-│   │   ├── driveSearch.ts          ← Google Drive full-text search
-│   │   └── vectorSearch.ts         ← Semantic search over ingested content
+│   │   ├── definitions.ts
+│   │   ├── executor.ts
+│   │   ├── webSearch.ts
+│   │   ├── webScrape.ts
+│   │   ├── driveSearch.ts
+│   │   └── vectorSearch.ts
 │   │
 │   └── vector/
-│       ├── vectorStore.ts          ← In-memory cosine similarity store + OpenAI embed()
-│       └── ingestion.ts            ← Drive → chunk → embed → store pipeline
+│       ├── vectorStore.ts
+│       └── ingestion.ts
 │
-├── backend/                        ← Express API server
+├── backend/
 │   ├── package.json
 │   ├── tsconfig.json
 │   ├── .env.example
 │   │
 │   └── src/
-│       ├── server.ts               ← Entry point (CORS, rate limit, routes)
+│       ├── server.ts
 │       │
 │       ├── routes/
-│       │   ├── auth.ts             ← GET /auth/drive, GET /auth/callback
-│       │   ├── agent.ts            ← POST /api/agent/run  (SSE stream)
-│       │   └── drive.ts            ← GET /api/drive/status, POST /api/drive/ingest/*
+│       │   ├── auth.ts
+│       │   ├── agent.ts
+│       │   └── drive.ts
 │       │
 │       ├── services/
-│       │   ├── singletons.ts       ← Shared tokenStore + vectorStore instances
-│       │   └── sse.ts              ← SSE helpers (initSSE / sendSSEEvent / closeSSE)
+│       │   ├── singletons.ts
+│       │   └── sse.ts
 │       │
 │       └── middleware/
-│           └── errorHandler.ts     ← 404 + 500 error handlers
+│           └── errorHandler.ts
 │
-└── frontend/                       ← React + Vite UI
+└── frontend/
     ├── package.json
     ├── tsconfig.json
     ├── vite.config.ts
@@ -67,57 +81,139 @@ AGENT_UI_BACKEND/                              ← root project folder
     ├── index.html
     │
     └── src/
-        ├── main.tsx                ← React entry point
-        ├── App.tsx                 ← Root layout (sidebar + main area)
-        ├── index.css               ← Tailwind base + custom scrollbar
+        ├── main.tsx
+        ├── App.tsx
+        ├── index.css
         │
         ├── types/
-        │   └── index.ts            ← Frontend types (mirrors agent types)
+        │   └── index.ts
         │
         ├── lib/
-        │   └── api.ts              ← Typed fetch wrappers + SSE stream helpers
+        │   └── api.ts
         │
         ├── hooks/
-        │   ├── useAgent.ts         ← Agent run state machine
-        │   └── useDriveStatus.ts   ← Drive connection status + polling
+        │   ├── useAgent.ts
+        │   └── useDriveStatus.ts
         │
         └── components/
-            ├── TaskInput.tsx        ← Query textarea + step-count selector
-            ├── DrivePanel.tsx       ← Drive connect / stats / ingest buttons
-            ├── StepTrace.tsx        ← Collapsible real-time step viewer
-            ├── ResultPanel.tsx      ← Markdown answer + citation badges
-            └── RunningIndicator.tsx ← Live "Searching..." status during run
+            ├── TaskInput.tsx
+            ├── DrivePanel.tsx
+            ├── StepTrace.tsx
+            ├── ResultPanel.tsx
+            └── RunningIndicator.tsx
+```
 
-3. how to run the project
-Clone the repo
-set up environment variables
-npm install  (agent, backend and frontend)
-npm run build  (agent only)
-npm run dev  (backend + frontend)
-Open http://localhost:5173 in your browser
-Click Connect Drive in the sidebar → authorize with Google
-Ingestion starts automatically in the background (watch Terminal 2 logs)
-Type a task and press enter
+---
 
+## How to Run the Project
 
+### 1. Clone the repo
 
-4. How it works -> 
+```
+git clone <repo-url>
+cd agent_ui_backend
+```
 
- Browser (localhost:5173)
-  │
-  │  POST /api/agent/run  { task, maxSteps }
-  │  ← SSE stream: step events → result event
-  │
+### 2. Set up environment variables
+
+Create `.env` files in:
+
+- agent/
+- backend/
+- frontend/
+
+---
+
+### 3. Install dependencies
+
+```
+cd agent
+npm install
+
+cd ../backend
+npm install
+
+cd ../frontend
+npm install
+```
+
+---
+
+### 4. Build agent
+
+```
+cd agent
+npm run build
+```
+
+---
+
+### 5. Start backend and frontend
+
+Terminal 1:
+```
+cd backend
+npm run dev
+```
+
+Terminal 2:
+```
+cd frontend
+npm run dev
+```
+
+---
+
+### 6. Open in browser
+
+```
+http://localhost:5173
+```
+
+- Click **Connect Drive**
+- Authorize Google
+- Ingestion starts automatically
+- Enter a task and press Enter
+
+---
+
+## How It Works
+
+```
+Browser (localhost:5173)
+        │
+        │ POST /api/agent/run
+        │
+        ▼
 Express Backend (localhost:3000)
-  │
-  │  imports and calls runAgent()
-  │
+        │
+        ▼
 Agent Module
-  ├── LLMClient → OpenAI API (gpt-4o-mini)
-  ├── webSearch → Serper.dev
-  ├── webScrape → native fetch
-  ├── driveSearch → Google Drive API v3
-  └── vectorSearch → VectorStore (cosine sim over OpenAI embeddings)
+├── LLMClient → OpenAI API
+├── webSearch → Serper.dev
+├── webScrape → fetch
+├── driveSearch → Google Drive API
+└── vectorSearch → VectorStore
+```
 
-Google OAuth flow:
-  Browser → GET /auth/drive → Google consent → GET /auth/callback → backend stores tokens → redirect to frontend
+---
+
+## Google OAuth Flow
+
+```
+Browser
+   │
+   ├── GET /auth/drive
+   │
+   ▼
+Google Consent Screen
+   │
+   ▼
+GET /auth/callback
+   │
+   ▼
+Backend stores tokens
+   │
+   ▼
+Redirect to frontend
+```
