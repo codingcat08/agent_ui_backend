@@ -119,12 +119,35 @@ cd agent_ui_backend
 
 ### 2. Set up environment variables
 
-Create `.env` files in:
+Copy the example files and fill in your keys:
+```bash
+cp agent/.env.example agent/.env
+cp backend/.env.example backend/.env
+```
 
-- agent/
-- backend/
-- frontend/
-
+Both files need the same values:
+```env
+OPENAI_API_KEY=sk-...
+SERPER_API_KEY=...
+GOOGLE_CLIENT_ID=....apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-...
+APP_BASE_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:5173
+PORT=3000
+SESSION_SECRET=any-long-random-string
+QDRANT_URL=https://your-cluster-url.cloud.qdrant.io
+QDRANT_API_KEY=your-qdrant-api-key
+# ── Optional: restrict ingestion to a specific Google Drive folder ──
+# If set, only files inside this folder will be ingested and searched.
+# If left empty, the entire Drive will be used.
+#
+# To find your folder ID:
+# 1. Open the folder in Google Drive
+# 2. Copy the last part of the URL:
+#    drive.google.com/drive/folders/THIS_PART_IS_THE_ID
+#
+DRIVE_FOLDER_ID=
+```
 ---
 
 ### 3. Install dependencies
