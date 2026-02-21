@@ -1,3 +1,5 @@
+<img width="1328" height="861" alt="Screenshot 2026-02-21 at 9 11 11 PM" src="https://github.com/user-attachments/assets/cf63d1c0-ecab-46ed-8e6a-54341e14304a" />
+
 # Agent UI Backend
 
 ## Project Highlights
