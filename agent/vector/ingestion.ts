@@ -5,7 +5,7 @@ import { VectorStore, embed } from "./vectorStore.js";
 const CHUNK_SIZE = 800;
 const CHUNK_OVERLAP = 150;
 
-const FOLDER_ID = "1Jt2cx2F5tTQ7kNy_Ra4t38EENj4F_5T4"; // Replace with your Google Drive folder ID
+const FOLDER_ID = "1Jt2cx2F5tTQ7kNy_Ra4t38EENj4F_5T4";
 
 const SUPPORTED_MIME_TYPES = [
   "application/vnd.google-apps.document",
@@ -121,6 +121,7 @@ export async function ingestAllDriveFiles(
 
       const chunks = chunkText(content);
       const vectorChunks: VectorChunk[] = [];
+
       for (let i = 0; i < chunks.length; i++) {
         const embedding = await embed(chunks[i]);
         vectorChunks.push({
@@ -133,7 +134,8 @@ export async function ingestAllDriveFiles(
           url: `https://drive.google.com/file/d/${file.id}`,
         });
       }
-      vectorStore.addChunks(vectorChunks);
+
+      await vectorStore.addChunks(vectorChunks); 
       progress.processed++;
     } catch (err) {
       console.error(`[Ingestion] Error processing ${file.name}:`, err);
@@ -176,12 +178,13 @@ export async function ingestIncrementalDriveFiles(
     progress.currentFile = file.name;
     onProgress?.(progress);
     try {
-      vectorStore.removeFileChunks(file.id);
+      await vectorStore.removeFileChunks(file.id); 
       const content = await exportFile(file, accessToken);
       if (!content.trim()) { progress.skipped++; continue; }
 
       const chunks = chunkText(content);
       const vectorChunks: VectorChunk[] = [];
+
       for (let i = 0; i < chunks.length; i++) {
         const embedding = await embed(chunks[i]);
         vectorChunks.push({
@@ -194,7 +197,8 @@ export async function ingestIncrementalDriveFiles(
           url: `https://drive.google.com/file/d/${file.id}`,
         });
       }
-      vectorStore.addChunks(vectorChunks);
+
+      await vectorStore.addChunks(vectorChunks); 
       progress.processed++;
     } catch (err) {
       console.error(`[Ingestion] Error processing ${file.name}:`, err);

@@ -4,7 +4,7 @@
 
 ```
 agent_ui_backend/
-├── agent/      ← Agent core (TypeScript) — tool loop, Drive, vector store
+├── agent/      ← Agent core (TypeScript) — tool loop, Drive, Qdrant vector db
 ├── backend/    ← API server — OAuth, SSE streaming, rate limiting
 └── frontend/   ← React — polished research UI
 ```
@@ -13,6 +13,7 @@ agent_ui_backend/
 
 - Node.js / TypeScript
 - OpenAI (GPT-4o-mini + text-embedding-3-small)
+- Qdrant (vector db)
 - Serper.dev (web search)
 - Google Drive API
 - React + Tailwind
@@ -193,7 +194,7 @@ Agent Module
 ├── webSearch → Serper.dev
 ├── webScrape → fetch
 ├── driveSearch → Google Drive API
-└── vectorSearch → VectorStore
+└── vectorSearch → Qdrant vectordb
 ```
 
 ---
