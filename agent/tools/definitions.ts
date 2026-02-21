@@ -5,7 +5,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     name: "web_search",
     description:
       "Search the web for current information. Returns a list of relevant results with titles, URLs, and snippets. " +
-      "Use this when you need factual information, recent news, or anything not likely to be in Google Drive.",
+      "it may be helpful if you need news ",
     input_schema: {
       type: "object",
       properties: {
@@ -36,7 +36,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     name: "drive_search",
     description:
       "Search for files in the user's connected Google Drive. Returns file metadata and a content excerpt. " +
-      "Use this when the task likely involves personal documents, internal reports, or uploaded files.",
+      "Use this when the task involves personal documents, internal reports, or uploaded files.",
     input_schema: {
       type: "object",
       properties: {

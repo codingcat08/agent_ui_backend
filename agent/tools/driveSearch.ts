@@ -1,3 +1,4 @@
+import "dotenv/config";
 import type { ToolResult, Citation } from "../types/index.js";
 import type { DriveTokenStore } from "../core/driveTokenStore.js";
 
@@ -58,7 +59,14 @@ export async function runDriveSearch(
   }
 
   try {
-    const driveQuery = `fullText contains '${query.replace(/'/g, "\\'")}' and trashed = false`;
+    // If DRIVE_FOLDER_ID is set in .env, scope search to that folder only.
+    // Otherwise search the entire Drive.
+    const folderFilter = process.env.DRIVE_FOLDER_ID
+      ? `'${process.env.DRIVE_FOLDER_ID}' in parents and `
+      : "";
+
+    const driveQuery = `${folderFilter}fullText contains '${query.replace(/'/g, "\\'")}' and trashed = false`;
+
     const listUrl = new URL("https://www.googleapis.com/drive/v3/files");
     listUrl.searchParams.set("q", driveQuery);
     listUrl.searchParams.set("pageSize", String(Math.min(max_results, 10)));
@@ -74,6 +82,7 @@ export async function runDriveSearch(
     const listData = (await listRes.json()) as {
       files?: Array<{ id: string; name: string; mimeType: string; webViewLink?: string; modifiedTime?: string }>;
     };
+
     const files = listData.files ?? [];
 
     if (files.length === 0) {
