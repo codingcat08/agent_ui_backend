@@ -9,10 +9,12 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "openai": "^4.57.0"
+    "openai": "^4.57.0",
+    "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "@types/pdf-parse": "^1.1.4"
   }
 }

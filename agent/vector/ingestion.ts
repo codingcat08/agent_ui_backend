@@ -1,3 +1,4 @@
+import pdfParse from "pdf-parse";
 import type { DriveFile, VectorChunk } from "../types/index.js";
 import type { DriveTokenStore } from "../core/driveTokenStore.js";
 import { VectorStore, embed } from "./vectorStore.js";
@@ -77,8 +78,23 @@ async function exportFile(file: DriveFile, accessToken: string): Promise<string>
   }
 
   if (file.mimeType === "application/pdf") {
-    console.warn(`[Ingestion] PDF extraction skipped for: ${file.name}`);
-    return "";
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+    if (!res.ok) {
+      console.warn(`[Ingestion] Failed to download PDF: ${file.name}`);
+      return "";
+    }
+    const buffer = Buffer.from(await res.arrayBuffer());
+    try {
+      const parsed = await pdfParse(buffer);
+      console.log(`[Ingestion] PDF extracted: ${file.name} (${parsed.numpages} pages)`);
+      return parsed.text;
+    } catch (err) {
+      console.warn(`[Ingestion] PDF parse failed for ${file.name}:`, err);
+      return "";
+    }
   }
 
   return "";
@@ -135,7 +151,7 @@ export async function ingestAllDriveFiles(
         });
       }
 
-      await vectorStore.addChunks(vectorChunks); 
+      await vectorStore.addChunks(vectorChunks);
       progress.processed++;
     } catch (err) {
       console.error(`[Ingestion] Error processing ${file.name}:`, err);

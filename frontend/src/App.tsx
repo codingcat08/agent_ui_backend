@@ -37,7 +37,7 @@ export default function App() {
               <Orbit size={18} className="text-ink-950" />
             </div>
             <div>
-              <h1 className="text-lg font-display font-800 text-ink-50 leading-none tracking-tight">Orion</h1>
+              <h1 className="text-lg font-display font-800 text-ink-50 leading-none tracking-tight">Libra</h1>
               <p className="text-xs text-ink-500 font-body mt-0.5">AI Research Agent</p>
             </div>
           </div>
