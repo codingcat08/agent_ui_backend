@@ -15,6 +15,7 @@ let _openaiClient: OpenAI | null = null;
 function getClient(): OpenAI {
   if (!_openaiClient) {
     const apiKey = process.env.OPENAI_API_KEY;
+    console.log("[DEBUG] Using OpenAI key:", apiKey?.slice(0, 20) + "...");  // add this
     if (!apiKey) throw new Error("OPENAI_API_KEY is not set.");
     _openaiClient = new OpenAI({ apiKey });
   }

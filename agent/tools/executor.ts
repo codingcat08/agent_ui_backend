@@ -20,13 +20,17 @@ export async function executeToolCall(
 
   switch (name) {
     case "web_search":
-      return runWebSearch(id, input as Parameters<typeof runWebSearch>[1]);
+      //return runWebSearch(id, input as Parameters<typeof runWebSearch>[1]);
+      return runWebSearch(id, input as unknown as Parameters<typeof runWebSearch>[1]);
     case "web_scrape":
-      return runWebScrape(id, input as Parameters<typeof runWebScrape>[1]);
+      //return runWebScrape(id, input as Parameters<typeof runWebScrape>[1]);
+      return runWebScrape(id, input as unknown as Parameters<typeof runWebScrape>[1]);
     case "drive_search":
-      return runDriveSearch(id, input as Parameters<typeof runDriveSearch>[1], deps.tokenStore);
+      //return runDriveSearch(id, input as Parameters<typeof runDriveSearch>[1], deps.tokenStore);
+      return runDriveSearch(id, input as unknown as Parameters<typeof runDriveSearch>[1], deps.tokenStore);
     case "vector_search":
-      return runVectorSearch(id, input as Parameters<typeof runVectorSearch>[1], deps.vectorStore);
+      //return runVectorSearch(id, input as Parameters<typeof runVectorSearch>[1], deps.vectorStore);
+      return runVectorSearch(id, input as unknown as Parameters<typeof runVectorSearch>[1], deps.vectorStore);
     default:
       return {
         tool_call_id: id,

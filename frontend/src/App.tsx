@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Orbit, RotateCcw } from "lucide-react";
 import { useAgent } from "./hooks/useAgent.js";
-import { TaskInput } from "./components/TaskInput.js";
-import { DrivePanel } from "./components/DrivePanel.js";
-import { StepTrace } from "./components/StepTrace.js";
-import { ResultPanel } from "./components/ResultPanel.js";
-import { RunningIndicator } from "./components/RunningIndicator.js";
-import { useDriveStatus } from "./hooks/useDriveStatus.js";
+import { TaskInput } from "./components/TaskInput";
+import { DrivePanel } from "./components/DrivePanel";
+import { StepTrace } from "./components/StepTrace";
+import { ResultPanel } from "./components/ResultPanel";
+import { RunningIndicator } from "./components/RunningIndicator";
+import { useDriveStatus } from "./hooks/useDriveStatus.ts";
 
 export default function App() {
   const { status: agentStatus, steps, result, error, run, cancel, reset } = useAgent();

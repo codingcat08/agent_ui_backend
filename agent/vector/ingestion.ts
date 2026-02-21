@@ -5,6 +5,8 @@ import { VectorStore, embed } from "./vectorStore.js";
 const CHUNK_SIZE = 800;
 const CHUNK_OVERLAP = 150;
 
+const FOLDER_ID = "1Jt2cx2F5tTQ7kNy_Ra4t38EENj4F_5T4"; // Replace with your Google Drive folder ID
+
 const SUPPORTED_MIME_TYPES = [
   "application/vnd.google-apps.document",
   "application/vnd.google-apps.presentation",
@@ -30,7 +32,7 @@ async function listDriveFiles(
 ): Promise<{ files: DriveFile[]; nextPageToken?: string }> {
   const mimeFilter = SUPPORTED_MIME_TYPES.map((m) => `mimeType='${m}'`).join(" or ");
   const url = new URL("https://www.googleapis.com/drive/v3/files");
-  url.searchParams.set("q", `(${mimeFilter}) and trashed = false`);
+  url.searchParams.set("q", `'${FOLDER_ID}' in parents and (${mimeFilter}) and trashed = false`);
   url.searchParams.set("pageSize", "100");
   url.searchParams.set("fields", "nextPageToken,files(id,name,mimeType,modifiedTime)");
   if (pageToken) url.searchParams.set("pageToken", pageToken);
@@ -154,7 +156,7 @@ export async function ingestIncrementalDriveFiles(
   if (!accessToken) throw new Error("Drive not connected.");
 
   const mimeFilter = SUPPORTED_MIME_TYPES.map((m) => `mimeType='${m}'`).join(" or ");
-  const query = `(${mimeFilter}) and trashed = false and modifiedTime > '${lastRunTimestamp}'`;
+  const query = `'${FOLDER_ID}' in parents and (${mimeFilter}) and trashed = false and modifiedTime > '${lastRunTimestamp}'`;
   const url = new URL("https://www.googleapis.com/drive/v3/files");
   url.searchParams.set("q", query);
   url.searchParams.set("pageSize", "100");
